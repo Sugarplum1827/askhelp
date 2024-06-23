@@ -41,7 +41,7 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 <body>
 <div class="w-400 shadow p-4 rounded">
-    	<a href="home.php"
+    	<a href="all_review.php"
     	   class="fs-4 link-dark">&#8592;</a>
     <h1>Star Reviews</h1>
     <form action="add_review.php" method="post">
