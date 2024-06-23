@@ -1,0 +1,19 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "127.0.0.1",
+            "port": 3306,
+            "driver": "MariaDB",
+            "name": "dbms",
+            "database": "chat_app_db",
+            "username": "testuser",
+            "password": "3k9b0r4b",
+            "connectionTimeout": 50
+        }
+    ]
+}
