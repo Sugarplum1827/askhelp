@@ -79,6 +79,14 @@
 
 		  <div class="mb-3">
 		    <label class="form-label">
+		           Valid Id</label>
+		    <input type="file" 
+		           class="form-control"
+		           name="valid_id">
+			</div>
+
+		  <div class="mb-3">
+		    <label class="form-label">
 		           Profile Picture</label>
 		    <input type="file" 
 		           class="form-control"
