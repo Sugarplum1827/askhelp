@@ -96,7 +96,7 @@
 		  <button type="submit" 
 		          class="btn btn-primary">
 		          Sign Up</button>
-		  <a href="verification.php">Login</a>
+		  <a href="index.php">Login</a>
 		</form>
 	 </div>
 </body>
