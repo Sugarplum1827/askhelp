@@ -1,9 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: index.php");
     die();
 }
+$user_id = $_SESSION['user_id']; // Retrieve the logged-in user's ID
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +63,11 @@ if (!isset($_SESSION['user_id'])) {
        
         <h2>All Reviews</h2>
         <div id="reviews">
-            <?php include("get_reviews.php"); ?>
+            <?php
+            // Set the user_id variable and include the get_reviews.php file
+            $reviewed_user_id = $user_id;
+            include("get_reviews.php");
+            ?>
         </div>
         <div class="add-rating ml-2 d-flex align-items-center">
             <p>Add Rating -</p>

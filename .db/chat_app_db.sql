@@ -120,3 +120,11 @@ CREATE TABLE reviews (
     review_text TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE reviews 
+ADD reviewed_user_id INT NOT NULL;
+
+-- Add foreign key constraint if necessary
+ALTER TABLE reviews 
+ADD CONSTRAINT fk_reviewed_user
+FOREIGN KEY (reviewed_user_id) REFERENCES users(user_id);
