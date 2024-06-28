@@ -72,8 +72,8 @@ foreach ($reviews as $review) {
     <div class="reviews-list">
         <a href="home.php" class="fs-4 link-dark">&#8592; Back to Home</a>
         <h2>All Reviews</h2>
-        <div class="add-review">
-            <a href="add_review.php" title="Add Review">
+        <div class="reviews">
+            <a href="reviews.php" title="Add Review">
                 <i class="fa fa-star fa-lg text-warning"></i> Add Review
             </a>
         </div>
