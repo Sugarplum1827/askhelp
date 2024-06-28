@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     die();
@@ -15,13 +16,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $created_at = date('Y-m-d H:i:s');
 
     // Fetch the username of the reviewer from the database
-    $stmt = $conn->prepare("SELECT username FROM users WHERE user_id = ?");
+    $stmt = $conn->prepare("SELECT name FROM users WHERE user_id = ?");
     $stmt->bindParam(1, $user_id, PDO::PARAM_INT);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        $username = $user['username'];
+        $username = $user['name'];
 
         if ($rating > 0 && $rating <= 5 && !empty($review_text)) {
             $stmt = $conn->prepare("INSERT INTO reviews (user_id, reviewed_user_id, username, rating, review_text, created_at) VALUES (?, ?, ?, ?, ?, ?)");
@@ -33,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(6, $created_at);
 
             if ($stmt->execute()) {
-                header("Location: reviews.php");
+                header("Location: all_review.php");
                 exit();
             } else {
                 echo "Error adding review.";

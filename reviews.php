@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id'])) {
 
 include("app/db.conn.php");
 
-$stmt = $conn->prepare("SELECT user_id, username FROM users");
+$stmt = $conn->prepare("SELECT user_id, name FROM users");
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -51,14 +51,14 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 <div class="container">
     <div class="w-400 shadow p-4 rounded mx-auto mt-5">
-        <a href="home.php" class="fs-4 link-dark">&#8592;</a>
+        <a href="all_review.php" class="fs-4 link-dark">&#8592;</a>
         <h1>Star Reviews</h1>
         <form action="add_review.php" method="post" id="reviewForm">
             <div class="form-group">
                 <label for="reviewed_user_id">Reviewing:</label>
                 <select class="form-control" id="reviewed_user_id" name="reviewed_user_id" required>
                     <?php foreach ($users as $user): ?>
-                        <option value="<?= $user['user_id']; ?>"><?= htmlspecialchars($user['username']); ?></option>
+                        <option value="<?= $user['user_id']; ?>"><?= htmlspecialchars($user['name']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -84,10 +84,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button type="submit" class="btn btn-primary">Submit Review</button>
         </form>
         <hr>
-        <h2>All Reviews</h2>
-        <div id="reviews">
-            <?php include("get_reviews.php"); ?>
-        </div>
     </div>
 </div>
 <script>

@@ -1,80 +1,105 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
-    die();
+include("app/db.conn.php");
+
+try {
+    $stmt = $conn->prepare("SELECT u.name AS reviewed_name, r.username AS reviewer_username, r.rating, r.review_text, r.created_at 
+                            FROM reviews r
+                            JOIN users u ON r.reviewed_user_id = u.user_id 
+                            ORDER BY u.name, r.created_at DESC");
+    $stmt->execute();
+    $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log($e->getMessage(), 3, 'error_log.txt');
+    $reviews = [];
+    $error_message = "An error occurred while fetching reviews. Please try again later.";
 }
-$user_id = $_SESSION['user_id']; // Retrieve the logged-in user's ID
+
+$grouped_reviews = [];
+foreach ($reviews as $review) {
+    $grouped_reviews[$review['reviewed_name']][] = $review;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Reviews</title>
-    <!-- Include Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Add some basic styles -->
     <style>
-        .w-400 {
-            width: 400px;
-        }
-        .shadow {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .p-4 {
-            padding: 1rem;
-        }
-        .rounded {
+        .reviews-list {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
             border-radius: 8px;
+            background-color: #f9f9f9;
         }
-        .fs-4 {
-            font-size: 1.5rem;
+        .reviewed-user {
+            margin-bottom: 30px;
         }
-        .link-dark {
-            color: #000;
-            text-decoration: none;
+        .reviewed-user h2 {
+            margin: 0 0 10px 0;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
         }
-        .ml-2 {
-            margin-left: 0.5rem;
+        .review {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
         }
-        .d-flex {
-            display: flex;
+        .review:last-child {
+            border-bottom: none;
         }
-        .align-items-center {
-            align-items: center;
+        .review h3 {
+            margin: 0;
         }
-        .text-warning {
+        .review p {
+            margin: 10px 0;
+        }
+        .review small {
+            color: #666;
+        }
+        .star {
             color: #ffc107;
         }
-        .add-rating {
-            display: flex;
-            align-items: center;
-        }
-        .add-rating p {
-            margin: 0;
-            margin-right: 0.5rem;
+        .star-empty {
+            color: #ddd;
         }
     </style>
 </head>
 <body>
-    <div class="w-400 shadow p-4 rounded">
-        <a href="home.php" class="fs-4 link-dark">&#8592;</a>
-       
+    <div class="reviews-list">
+        <a href="home.php" class="fs-4 link-dark">&#8592; Back to Home</a>
         <h2>All Reviews</h2>
-        <div id="reviews">
-            <?php
-            // Set the user_id variable and include the get_reviews.php file
-            $reviewed_user_id = $user_id;
-            include("get_reviews.php");
-            ?>
-        </div>
-        <div class="add-rating ml-2 d-flex align-items-center">
-            <p>Add Rating -</p>
-            <a href="reviews.php" title="Review">
-                <i class="fa fa-star fa-lg text-warning"></i>
+        <div class="add-review">
+            <a href="add_review.php" title="Add Review">
+                <i class="fa fa-star fa-lg text-warning"></i> Add Review
             </a>
         </div>
+
+        <?php if (!empty($grouped_reviews)): ?>
+            <?php foreach ($grouped_reviews as $reviewed_name => $user_reviews): ?>
+                <div class="reviewed-user">
+                    <h2>Reviews for <?= htmlspecialchars($reviewed_name, ENT_QUOTES, 'UTF-8') ?></h2>
+                    <?php foreach ($user_reviews as $review): ?>
+                        <div class="review">
+                            <h3>Reviewed by <?= htmlspecialchars($review['reviewer_username'], ENT_QUOTES, 'UTF-8') ?></h3>
+                            <p>
+                                Rating: 
+                                <?php for ($i = 0; $i < 5; $i++): ?>
+                                    <span class="<?= $i < $review['rating'] ? 'star' : 'star-empty' ?>">&#9733;</span>
+                                <?php endfor; ?>
+                            </p>
+                            <p><?= htmlspecialchars($review['review_text'], ENT_QUOTES, 'UTF-8') ?></p>
+                            <small>Posted on: <?= htmlspecialchars($review['created_at'], ENT_QUOTES, 'UTF-8') ?></small>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p><?= isset($error_message) ? htmlspecialchars($error_message, ENT_QUOTES, 'UTF-8') : "No reviews available." ?></p>
+        <?php endif; ?>
     </div>
 </body>
 </html>

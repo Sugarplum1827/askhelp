@@ -35,7 +35,7 @@ if (isset($_SESSION['username'])) {
                 <a href="#" title="Call" class="mr-2">
                     <i class="fa fa-phone fa-lg text-primary"></i>
                 </a>
-                <a href="all_review.php" title="Review">
+                <a href="reviews.php?reviewed_user_id=<?= htmlspecialchars($user['user_id']) ?>" title="Review">
                     <i class="fa fa-star fa-lg text-warning"></i>
                 </a>
             </div>
