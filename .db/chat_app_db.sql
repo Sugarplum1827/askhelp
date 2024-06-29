@@ -128,3 +128,6 @@ ADD reviewed_user_id INT NOT NULL;
 ALTER TABLE reviews 
 ADD CONSTRAINT fk_reviewed_user
 FOREIGN KEY (reviewed_user_id) REFERENCES users(user_id);
+
+--add to vefirify users
+ALTER TABLE users ADD verified TINYINT(1) DEFAULT 0;
