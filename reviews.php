@@ -7,9 +7,9 @@ if (!isset($_SESSION['user_id'])) {
 
 include("app/db.conn.php");
 
-$stmt = $conn->prepare("SELECT user_id, name FROM users");
+$stmt = $conn->prepare("SELECT user_id, username, name FROM users WHERE is_agency = 1");
 $stmt->execute();
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$agencies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -57,8 +57,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="form-group">
                 <label for="reviewed_user_id">Reviewing:</label>
                 <select class="form-control" id="reviewed_user_id" name="reviewed_user_id" required>
-                    <?php foreach ($users as $user): ?>
-                        <option value="<?= $user['user_id']; ?>"><?= htmlspecialchars($user['name']); ?></option>
+                    <?php foreach ($agencies as $agency): ?>
+                        <option value="<?= $agency['user_id']; ?>"><?= htmlspecialchars($agency['name']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -83,7 +83,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <button type="submit" class="btn btn-primary">Submit Review</button>
         </form>
-        <hr>
+       
     </div>
 </div>
 <script>

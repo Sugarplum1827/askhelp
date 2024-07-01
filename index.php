@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT user_id, username, password, verified FROM users WHERE username = ?");
+    $stmt = $conn->prepare("SELECT user_id, username, password, verified, is_admin FROM users WHERE username = ?");
     $stmt->bindParam(1, $username);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['username'] = $user['username'];
-            if ($username == 'admin') {
+            if ($user['is_admin'] == 1) {
                 header("Location: admin.php");
             } else {
                 header("Location: home.php");

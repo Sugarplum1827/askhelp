@@ -13,16 +13,16 @@ if (isset($_SESSION['username'])) {
         $key = "%{$_POST['key']}%";
 
         $sql = "SELECT * FROM users
-                WHERE username LIKE ? OR name LIKE ?";
+                WHERE (username LIKE ? OR name LIKE ?)
+                AND user_id != ?
+                AND is_agency = 1";  # Only show government agency users
         $stmt = $conn->prepare($sql);
-        $stmt->execute([$key, $key]);
+        $stmt->execute([$key, $key, $_SESSION['user_id']]);
 
         if ($stmt->rowCount() > 0) { 
             $users = $stmt->fetchAll();
 
-            foreach ($users as $user) {
-                if ($user['user_id'] == $_SESSION['user_id']) continue;
-?>
+            foreach ($users as $user) { ?>
 <li class="list-group-item">
     <a href="chat.php?user=<?= htmlspecialchars($user['username']) ?>"
        class="d-flex align-items-center p-2">
@@ -30,12 +30,11 @@ if (isset($_SESSION['username'])) {
             <img src="uploads/<?= htmlspecialchars($user['p_p']) ?>"
                  class="w-10 rounded-circle">
             <h3 class="fs-xs m-2"><?= htmlspecialchars($user['name']) ?></h3>
-            <!-- Add call and review icons -->
             <div class="ml-2 d-flex align-items-center">
-                <a href="#" title="Call" class="mr-2">
+                <a href="call.php?user=<?= htmlspecialchars($user['username']) ?>" title="Call" class="mr-2">
                     <i class="fa fa-phone fa-lg text-primary"></i>
                 </a>
-                <a href="reviews.php?reviewed_user_id=<?= htmlspecialchars($user['user_id']) ?>" title="Review">
+                <a href="all_review.php?user_id=<?= htmlspecialchars($user['user_id']) ?>" title="Review">
                     <i class="fa fa-star fa-lg text-warning"></i>
                 </a>
             </div>
