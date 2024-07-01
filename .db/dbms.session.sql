@@ -134,6 +134,12 @@ ALTER TABLE users ADD verified TINYINT(1) DEFAULT 0;
 
 ALTER TABLE users ADD COLUMN is_admin TINYINT(1) DEFAULT 0;
 
+ALTER table users add column valid_id VARCHAR(255) not NULL;
+
+ALTER TABLE users ADD COLUMN is_agency TINYINT(1) DEFAULT 0;
+
+
+
 CREATE TABLE call_logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     caller_id INT NOT NULL,
@@ -141,4 +147,27 @@ CREATE TABLE call_logs (
     call_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (caller_id) REFERENCES users(user_id),
     FOREIGN KEY (receiver_id) REFERENCES users(user_id)
-);
+);INSERT INTO users (
+    user_id,
+    name,
+    username,
+    password,
+    p_p,
+    last_seen,
+    valid_id,
+    verified,
+    is_admin,
+    is_agency
+  )
+VALUES (
+    user_id:int,
+    'name:varchar',
+    'username:varchar',
+    'password:varchar',
+    'p_p:varchar',
+    'last_seen:datetime',
+    'valid_id:varchar',
+    'verified:tinyint',
+    'is_admin:tinyint',
+    'is_agency:tinyint'
+  );
