@@ -131,3 +131,14 @@ FOREIGN KEY (reviewed_user_id) REFERENCES users(user_id);
 
 --add to vefirify users
 ALTER TABLE users ADD verified TINYINT(1) DEFAULT 0;
+
+ALTER TABLE users ADD COLUMN is_admin TINYINT(1) DEFAULT 0;
+
+CREATE TABLE call_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    caller_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    call_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (caller_id) REFERENCES users(user_id),
+    FOREIGN KEY (receiver_id) REFERENCES users(user_id)
+);
