@@ -82,7 +82,7 @@ if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['n
                $img_ex_lc = strtolower($img_ex);
                if (in_array($img_ex_lc, $allowed_exs)) {
                   $new_img_name = $username . '.' . $img_ex_lc;
-                  $img_upload_path = '../../uploads/' . $new_img_name;
+                  $img_upload_path = '../../uploads/profile_pic/' . $new_img_name;
                   move_uploaded_file($tmp_name, $img_upload_path);
                } else {
                   $em = "You can't upload files of this type for profile picture";
