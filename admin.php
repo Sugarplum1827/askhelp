@@ -29,6 +29,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
     <meta charset="UTF-8">
     <title>Admin Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .modal-content img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+    <script>
+        function showImage(src) {
+            document.getElementById('modalImage').src = src;
+            var myModal = new bootstrap.Modal(document.getElementById('imageModal'));
+            myModal.show();
+        }
+    </script>
 </head>
 <body>
     <div class="container mt-5">
@@ -40,7 +53,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
             <ul class="list-group">
                 <?php foreach ($unverified_users as $user): ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                       Phone number: <?= htmlspecialchars($user['username']) ?> (Name: <?= htmlspecialchars($user['name']) ?>, ID: <?= htmlspecialchars($user['valid_id']) ?>)
+                       Phone number: <?= htmlspecialchars($user['username']) ?> (Name: <?= htmlspecialchars($user['name']) ?>, ID: 
+                       <a href="#" onclick="showImage('uploads/valid_ids/<?= htmlspecialchars($user['valid_id']) ?>')">
+                           <?= htmlspecialchars($user['valid_id']) ?>
+                       </a>)
                         <form action="admin.php" method="post" class="d-inline">
                             <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>">
                             <button type="submit" class="btn btn-success">Verify</button>
@@ -51,5 +67,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
         <?php endif; ?>
         <a href="logout.php" class="btn btn-secondary mt-3">Logout</a>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">ID Image</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" class="img-fluid" alt="ID Image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
