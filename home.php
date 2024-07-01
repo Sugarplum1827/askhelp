@@ -47,7 +47,6 @@
     			</div>
     			<a href="logout.php"
     			   class="btn btn-dark">Logout</a>
-			<a href="call_logs.php" class="btn btn-dark">Logs</a>
     		</div>
 
     		<div class="input-group mb-3">
@@ -66,31 +65,18 @@
     			    <?php 
 
     			    foreach ($conversations as $conversation){ ?>
-<li class="list-group-item">
-    <a href="chat.php?user=<?=$conversation['username']?>"
-       class="d-flex justify-content-between align-items-center p-2">
-        <div class="d-flex align-items-center">
-            <img src="uploads/<?=$conversation['p_p']?>"
-                 class="w-10 rounded-circle">
-            <h3 class="fs-xs m-2">
-                <?=$conversation['name']?><br>
-                <small>
-                    <?php echo lastChat($_SESSION['user_id'], $conversation['user_id'], $conn); ?>
-                </small>
-            </h3>
-        </div>
-        <div class="d-flex align-items-center">
-            <?php if (last_seen($conversation['last_seen']) == "Active") { ?>
-                <div title="online">
-                    <div class="online"></div>
-                </div>
-            <?php } ?>
-            <a href="call.php?user=<?=$conversation['username']?>" class="ml-2" title="Call">
-                <i class="fa fa-phone fa-lg text-primary"></i>
-            </a>
-        </div>
-    </a>
-</li>
+	    			<li class="list-group-item">
+	    				<a href="chat.php?user=<?=$conversation['username']?>"
+	    				   class="d-flex
+	    				          justify-content-between
+	    				          align-items-center p-2">
+	    					<div class="d-flex
+	    					            align-items-center">
+	    					    <img src="uploads/<?=$conversation['p_p']?>"
+	    					         class="w-10 rounded-circle">
+	    					    <h3 class="fs-xs m-2">
+	    					    	<?=$conversation['name']?><br>
+                      <small>
                         <?php 
                           echo lastChat($_SESSION['user_id'], $conversation['user_id'], $conn);
                         ?>

@@ -55,11 +55,7 @@ if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['n
             if (in_array($valid_id_ex_lc, $allowed_exs)) {
                $new_valid_id_name = $username . '_valid_id.' . $valid_id_ex_lc;
                $valid_id_upload_path = '../../uploads/valid_ids/' . $new_valid_id_name;
-               if (move_uploaded_file($valid_id_tmp_name, $valid_id_upload_path)) {
-                  echo "File uploaded successfully to: $valid_id_upload_path";
-               } else {
-                  echo "Failed to move uploaded file.";
-               }
+               move_uploaded_file($valid_id_tmp_name, $valid_id_upload_path);
             } else {
                $em = "You can't upload files of this type for valid ID";
                header("Location: ../../signup.php?error=$em&$data");
@@ -82,7 +78,7 @@ if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['n
                $img_ex_lc = strtolower($img_ex);
                if (in_array($img_ex_lc, $allowed_exs)) {
                   $new_img_name = $username . '.' . $img_ex_lc;
-                  $img_upload_path = '../../uploads/profile_pic/' . $new_img_name;
+                  $img_upload_path = '../../uploads/' . $new_img_name;
                   move_uploaded_file($tmp_name, $img_upload_path);
                } else {
                   $em = "You can't upload files of this type for profile picture";
