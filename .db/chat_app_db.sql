@@ -3,7 +3,6 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 01, 2021 at 04:38 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -142,3 +141,14 @@ CREATE TABLE call_logs (
     FOREIGN KEY (caller_id) REFERENCES users(user_id),
     FOREIGN KEY (receiver_id) REFERENCES users(user_id)
 );
+
+CREATE TABLE chatbot (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    queries VARCHAR(300) NOT NULL,
+    replies VARCHAR(300) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+-- add questions and answer to the chatbot
+INSERT INTO chatbot (queries, replies) 
+VALUES ('hi', 'Hello, how can I help you today?');

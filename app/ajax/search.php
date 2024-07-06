@@ -2,20 +2,17 @@
 
 session_start();
 
-# Check if the user is logged in
-if (isset($_SESSION['username'])) {
-    # Check if the key is submitted
-    if (isset($_POST['key'])) {
-        # Database connection file
-        include '../db.conn.php';
 
-        # Creating a simple search algorithm
+if (isset($_SESSION['username'])) {
+
+    if (isset($_POST['key'])) {
+        include '../db.conn.php';
         $key = "%{$_POST['key']}%";
 
         $sql = "SELECT * FROM users
                 WHERE (username LIKE ? OR name LIKE ?)
                 AND user_id != ?
-                AND is_agency = 1";  # Only show government agency users
+                AND is_agency = 1";  
         $stmt = $conn->prepare($sql);
         $stmt->execute([$key, $key, $_SESSION['user_id']]);
 

@@ -2,20 +2,15 @@
 
 session_start();
 
-# check if the user is logged in
 if (isset($_SESSION['username'])) {
 
 	if (isset($_POST['message']) &&
         isset($_POST['to_id'])) {
-	
-	# database connection file
 	include '../db.conn.php';
 
-	# get data from XHR request and store them in var
 	$message = $_POST['message'];
 	$to_id = $_POST['to_id'];
 
-	# get the logged in user's username from the SESSION
 	$from_id = $_SESSION['user_id'];
 
 	$sql = "INSERT INTO 

@@ -32,7 +32,7 @@ if (isset($_SESSION['username'])) {
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100">
     <div class="w-400 shadow p-4 rounded mx-auto mt-5">
-        <a href="home.php" class="fs-4 link-dark">&#8592;</a>
+        <a href="log.php" class="fs-4 link-dark">&#8592;</a>
         <h2>Call Logs</h2>
         <ul class="list-group mvh-50 overflow-auto">
             <?php if (!empty($callLogs)) { ?>

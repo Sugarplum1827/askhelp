@@ -2,19 +2,14 @@
 session_start();
 
 if (isset($_SESSION['username'])) {
-    // Database connection file
     include 'app/db.conn.php';
     include 'app/helpers/user.php';
     include 'app/helpers/conversations.php';
     include 'app/helpers/timeAgo.php';
     include 'app/helpers/last_chat.php';
 
-    // Getting User data
     $user = getUser($_SESSION['username'], $conn);
-
-    // Getting User conversations
     $conversations = getConversation($user['user_id'], $conn);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,6 +44,151 @@ if (isset($_SESSION['username'])) {
         }
         .chat-item small {
             display: block;
+        }
+        .wrapper {
+            width: 370px;
+            background: #fff;
+            border-radius: 5px;
+            border: 1px solid lightgrey;
+            border-top: 0px;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            display: none;
+            z-index: 1000;
+        }
+        .wrapper .title {
+            background: #007bff;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 60px;
+            text-align: center;
+            border-bottom: 1px solid #006fe6;
+            border-radius: 5px 5px 0 0;
+        }
+        .wrapper .form {
+            padding: 20px 15px;
+            min-height: 400px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .wrapper .form .inbox {
+            width: 100%;
+            display: flex;
+            align-items: baseline;
+        }
+        .wrapper .form .user-inbox {
+            justify-content: flex-end;
+            margin: 13px 0;
+        }
+        .wrapper .form .inbox .icon {
+            height: 40px;
+            width: 40px;
+            color: #fff;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            background: #007bff;
+        }
+        .wrapper .form .inbox .msg-header {
+            max-width: 53%;
+            margin-left: 10px;
+        }
+        .form .inbox .msg-header p {
+            color: #fff;
+            background: #007bff;
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 14px;
+            word-break: break-all;
+        }
+        .form .user-inbox .msg-header p {
+            color: #333;
+            background: #efefef;
+        }
+        .wrapper .typing-field {
+            display: flex;
+            height: 60px;
+            width: 100%;
+            align-items: center;
+            justify-content: space-evenly;
+            background: #efefef;
+            border-top: 1px solid #d9d9d9;
+            border-radius: 0 0 5px 5px;
+        }
+        .wrapper .typing-field .input-data {
+            height: 40px;
+            width: 335px;
+            position: relative;
+        }
+        .wrapper .typing-field .input-data input {
+            height: 100%;
+            width: 100%;
+            outline: none;
+            border: 1px solid transparent;
+            padding: 0 80px 0 15px;
+            border-radius: 3px;
+            font-size: 15px;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+        .typing-field .input-data input:focus {
+            border-color: rgba(0,123,255,0.8);
+        }
+        .input-data input::placeholder {
+            color: #999999;
+            transition: all 0.3s ease;
+        }
+        .input-data input:focus::placeholder {
+            color: #bfbfbf;
+        }
+        .wrapper .typing-field .input-data button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            height: 30px;
+            width: 65px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            outline: none;
+            opacity: 0;
+            pointer-events: none;
+            border-radius: 3px;
+            background: #007bff;
+            border: 1px solid #007bff;
+            transform: translateY(-50%);
+            transition: all 0.3s ease;
+        }
+        .wrapper .typing-field .input-data input:valid ~ button {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .typing-field .input-data button:hover {
+            background: #006fef;
+        }
+        .chatbot-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            transition: background 0.3s ease;
+        }
+        .chatbot-icon:hover {
+            background: #0056b3;
         }
     </style>
 </head>
@@ -88,7 +228,6 @@ if (isset($_SESSION['username'])) {
                                             <div class="online"></div>
                                         </div>
                                     <?php } ?>
-									<div class="d-flex align-items-center">
                                     <a href="call.php?user=<?=$conversation['username']?>" class="ml-2" title="Call">
                                         <i class="fa fa-phone fa-lg text-primary"></i>
                                     </a>
@@ -106,38 +245,82 @@ if (isset($_SESSION['username'])) {
         </div>
     </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <button class="chatbot-icon">
+    <i class="fa fa-envelope fa-lg text-dark"></i>
+    </button>
+    <div class="wrapper">
+        <div class="title">Chatbot</div>
+        <div class="form">
+            <div class="bot-inbox inbox">
+                <div class="icon">
+                <i class="fa fa-user"></i>
+                </div>
+                <div class="msg-header">
+                    <p>Hello there, how can I help you?</p>
+                </div>
+            </div>
+        </div>
+        <div class="typing-field">
+            <div class="input-data">
+                <input id="data" type="text" placeholder="Type something here.." required>
+                <button id="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
 
-<script>
-    $(document).ready(function() {
-        // Search
-        $("#searchText").on("input", function() {
-            var searchText = $(this).val();
-            if (searchText == "") return;
-            $.post('app/ajax/search.php', { key: searchText }, function(data, status) {
-                $("#chatList").html(data);
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#searchText").on("input", function() {
+                var searchText = $(this).val();
+                if (searchText == "") return;
+                $.post('app/ajax/search.php', { key: searchText }, function(data, status) {
+                    $("#chatList").html(data);
+                });
+            });
+
+            $("#searchBtn").on("click", function() {
+                var searchText = $("#searchText").val();
+                if (searchText == "") return;
+                $.post('app/ajax/search.php', { key: searchText }, function(data, status) {
+                    $("#chatList").html(data);
+                });
+            });
+
+            let lastSeenUpdate = function() {
+                $.get("app/ajax/update_last_seen.php");
+            }
+            lastSeenUpdate();
+            setInterval(lastSeenUpdate, 10000);
+
+            function sendMessage(message) {
+                var $msg = '<div class="user-inbox inbox"><div class="msg-header"><p>'+ message +'</p></div></div>';
+                $(".form").append($msg);
+                $("#data").val('');
+                $.ajax({
+                    url: 'message.php',
+                    type: 'POST',
+                    data: 'text='+message,
+                    success: function(result){
+                        var $replay = '<div class="bot-inbox inbox"><div class="icon"><i class="fa fa-user"></i></div><div class="msg-header"><p>'+ result +'</p></div></div>';
+                        $(".form").append($replay);
+                        $(".form").scrollTop($(".form")[0].scrollHeight);
+                    }
+                });
+            }
+
+            $("#send-btn").on("click", function(){
+                var value = $("#data").val();
+                if (value) {
+                    sendMessage(value);
+                }
+            });
+
+            $(".chatbot-icon").on("click", function(){
+                $(".wrapper").toggle();
             });
         });
-
-        // Search using the button
-        $("#searchBtn").on("click", function() {
-            var searchText = $("#searchText").val();
-            if (searchText == "") return;
-            $.post('app/ajax/search.php', { key: searchText }, function(data, status) {
-                $("#chatList").html(data);
-            });
-        });
-
-        // Auto update last seen for logged in user
-        let lastSeenUpdate = function() {
-            $.get("app/ajax/update_last_seen.php");
-        }
-        lastSeenUpdate();
-
-        // Auto update last seen every 10 sec
-        setInterval(lastSeenUpdate, 10000);
-    });
-</script>
+    </script>
 </body>
 </html>
 <?php

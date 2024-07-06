@@ -15,7 +15,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $review_text = trim($_POST['review_text']);
     $created_at = date('Y-m-d H:i:s');
 
-    // Fetch the username of the reviewer from the database
     $stmt = $conn->prepare("SELECT name FROM users WHERE user_id = ?");
     $stmt->bindParam(1, $user_id, PDO::PARAM_INT);
     $stmt->execute();

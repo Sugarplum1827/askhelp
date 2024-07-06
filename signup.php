@@ -61,7 +61,7 @@
 
 		  <div class="mb-3">
 		    <label class="form-label">
-		           Phone Number</label>
+		           Phone Number(Username)</label>
 		    <input type="text" 
 		           class="form-control"
 		           value="<?=$username?>" 

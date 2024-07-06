@@ -1,13 +1,10 @@
 <?php 
 
 session_start();
-
-# check if the user is logged in
 if (isset($_SESSION['username'])) {
 
 	if (isset($_POST['id_2'])) {
-	
-	# database connection file
+
 	include '../db.conn.php';
 
 	$id_1  = $_SESSION['user_id'];
@@ -24,7 +21,6 @@ if (isset($_SESSION['username'])) {
 	if ($stmt->rowCount() > 0) {
 	    $chats = $stmt->fetchAll();
 
-	    # looping through the chats
 	    foreach ($chats as $chat) {
 	    	if ($chat['opened'] == 0) {
 	    		

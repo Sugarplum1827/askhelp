@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form method="post" action="index.php">
             <div class="d-flex justify-content-center align-items-center flex-column">
                 <img src="img/logo.png" class="w-25">
-                <h3 class="display-4 fs-1 text-center">LOGIN</h3>
+                <h3 class="display-4 fs-1 text-center">Ask n' Help</h3>
             </div>
             <?php if (isset($_GET['error'])) { ?>
             <div class="alert alert-warning" role="alert">

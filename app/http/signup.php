@@ -1,20 +1,15 @@
 <?php  
-// Check if required form fields are submitted
 if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['name'])) {
 
-   // Include the database connection file
    include '../db.conn.php';
 
-   // Get data from POST request
    $name = $_POST['name'];
    $password = $_POST['password'];
    $username = $_POST['username'];
    $valid_id_file = $_FILES['valid_id'];
 
-   // URL encode data for redirection
    $data = 'name=' . urlencode($name) . '&username=' . urlencode($username);
 
-   // Form validation
    if (empty($name)) {
       $em = "Name is required";
       header("Location: ../../signup.php?error=$em");
@@ -32,7 +27,7 @@ if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['n
       header("Location: ../../signup.php?error=$em&$data");
       exit;
    } else {
-      // Check if the username is already taken
+
       $sql = "SELECT username FROM users WHERE username = ?";
       $stmt = $conn->prepare($sql);
       $stmt->execute([$username]);
@@ -42,7 +37,7 @@ if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['n
          header("Location: ../../signup.php?error=$em&$data");
          exit;
       } else {
-         // Handle valid ID file upload
+ 
          $valid_id_name = $valid_id_file['name'];
          $valid_id_tmp_name = $valid_id_file['tmp_name'];
          $valid_id_error = $valid_id_file['error'];
@@ -67,7 +62,6 @@ if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['n
             exit;
          }
 
-         // Handle profile picture upload if provided
          if (isset($_FILES['pp'])) {
             $img_name = $_FILES['pp']['name'];
             $tmp_name = $_FILES['pp']['tmp_name'];
@@ -88,10 +82,8 @@ if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['n
             }
          }
 
-         // Hash the password
          $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-         // Insert data into the database
          $sql = isset($new_img_name) ?
             "INSERT INTO users (name, username, password, p_p, valid_id) VALUES (?, ?, ?, ?, ?)" :
             "INSERT INTO users (name, username, password, valid_id) VALUES (?, ?, ?, ?)";
@@ -103,7 +95,6 @@ if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['n
          
          $stmt->execute($params);
 
-         // Success message
          $sm = "Account created successfully";
          header("Location: ../../verification.php?success=$sm");
          exit;

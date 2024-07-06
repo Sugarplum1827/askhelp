@@ -3,7 +3,6 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 01, 2021 at 04:38 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 8.0.3
 
@@ -147,27 +146,15 @@ CREATE TABLE call_logs (
     call_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (caller_id) REFERENCES users(user_id),
     FOREIGN KEY (receiver_id) REFERENCES users(user_id)
-);INSERT INTO users (
-    user_id,
-    name,
-    username,
-    password,
-    p_p,
-    last_seen,
-    valid_id,
-    verified,
-    is_admin,
-    is_agency
-  )
-VALUES (
-    user_id:int,
-    'name:varchar',
-    'username:varchar',
-    'password:varchar',
-    'p_p:varchar',
-    'last_seen:datetime',
-    'valid_id:varchar',
-    'verified:tinyint',
-    'is_admin:tinyint',
-    'is_agency:tinyint'
-  );
+);
+
+CREATE TABLE chatbot (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    queries VARCHAR(300) NOT NULL,
+    replies VARCHAR(300) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+-- add questions and answer to the chatbot
+INSERT INTO chatbot (queries, replies) 
+VALUES ('hi', 'Hello, how can I help you today?');

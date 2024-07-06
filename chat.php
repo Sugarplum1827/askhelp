@@ -2,9 +2,8 @@
   session_start();
 
   if (isset($_SESSION['username'])) {
-  	# database connection file
-  	include 'app/db.conn.php';
 
+  	include 'app/db.conn.php';
   	include 'app/helpers/user.php';
   	include 'app/helpers/chat.php';
   	include 'app/helpers/opened.php';
@@ -15,8 +14,6 @@
   		header("Location: home.php");
   		exit;
   	}
-
-  	# Getting User data data
   	$chatWith = getUser($_GET['user'], $conn);
 
   	if (empty($chatWith)) {
@@ -191,4 +188,4 @@
   	header("Location: index.php");
    	exit;
   }
- ?>
+ ?> the send of chat is in this template
