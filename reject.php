@@ -12,10 +12,10 @@
     <div class="w-400 p-5 shadow rounded">
         <div class="d-flex justify-content-center align-items-center flex-column">
             <img src="img/logo.png" class="w-25">
-            <h3 class="display-4 fs-1 text-center">Your Account is Being Verified</h3>
+            <h3 class="display-4 fs-1 text-center">Account Rejected</h3>
         </div>
         <div class="alert alert-danger" role="alert">
-        Please wait for a few hours while your account is being verified by the admin.
+            Your account has been rejected. Please wait for a few hours to be able to use your number.
         </div>
         <a href="logout.php"
     			   class="btn btn-dark">Logout</a>

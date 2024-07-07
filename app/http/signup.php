@@ -1,5 +1,5 @@
 <?php  
-if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['name'])) {
+if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_FILES['pp'], $_POST['name'])) {
 
    include '../db.conn.php';
 
@@ -7,6 +7,7 @@ if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['n
    $password = $_POST['password'];
    $username = $_POST['username'];
    $valid_id_file = $_FILES['valid_id'];
+   $pp_file = $_FILES['pp'];
 
    $data = 'name=' . urlencode($name) . '&username=' . urlencode($username);
 
@@ -24,6 +25,10 @@ if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['n
       exit;
    } elseif ($valid_id_file['error'] !== UPLOAD_ERR_OK) {
       $em = "Valid ID is required";
+      header("Location: ../../signup.php?error=$em&$data");
+      exit;
+   } elseif ($pp_file['error'] !== UPLOAD_ERR_OK) {
+      $em = "Profile picture is required";
       header("Location: ../../signup.php?error=$em&$data");
       exit;
    } else {
@@ -62,36 +67,34 @@ if (isset($_POST['username'], $_POST['password'], $_FILES['valid_id'], $_POST['n
             exit;
          }
 
-         if (isset($_FILES['pp'])) {
-            $img_name = $_FILES['pp']['name'];
-            $tmp_name = $_FILES['pp']['tmp_name'];
-            $error = $_FILES['pp']['error'];
+         $img_name = $pp_file['name'];
+         $tmp_name = $pp_file['tmp_name'];
+         $error = $pp_file['error'];
 
-            if ($error === 0) {
-               $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
-               $img_ex_lc = strtolower($img_ex);
-               if (in_array($img_ex_lc, $allowed_exs)) {
-                  $new_img_name = $username . '.' . $img_ex_lc;
-                  $img_upload_path = '../../uploads/' . $new_img_name;
-                  move_uploaded_file($tmp_name, $img_upload_path);
-               } else {
-                  $em = "You can't upload files of this type for profile picture";
-                  header("Location: ../../signup.php?error=$em&$data");
-                  exit;
-               }
+         if ($error === 0) {
+            $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+            $img_ex_lc = strtolower($img_ex);
+            if (in_array($img_ex_lc, $allowed_exs)) {
+               $new_img_name = $username . '.' . $img_ex_lc;
+               $img_upload_path = '../../uploads/' . $new_img_name;
+               move_uploaded_file($tmp_name, $img_upload_path);
+            } else {
+               $em = "You can't upload files of this type for profile picture";
+               header("Location: ../../signup.php?error=$em&$data");
+               exit;
             }
+         } else {
+            $em = "Error uploading profile picture";
+            header("Location: ../../signup.php?error=$em&$data");
+            exit;
          }
 
          $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-         $sql = isset($new_img_name) ?
-            "INSERT INTO users (name, username, password, p_p, valid_id) VALUES (?, ?, ?, ?, ?)" :
-            "INSERT INTO users (name, username, password, valid_id) VALUES (?, ?, ?, ?)";
+         $sql = "INSERT INTO users (name, username, password, p_p, valid_id) VALUES (?, ?, ?, ?, ?)";
          
          $stmt = $conn->prepare($sql);
-         $params = isset($new_img_name) ?
-            [$name, $username, $hashed_password, $new_img_name, $new_valid_id_name] :
-            [$name, $username, $hashed_password, $new_valid_id_name];
+         $params = [$name, $username, $hashed_password, $new_img_name, $new_valid_id_name];
          
          $stmt->execute($params);
 

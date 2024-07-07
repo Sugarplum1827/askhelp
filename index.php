@@ -12,13 +12,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $stmt = $conn->prepare("SELECT user_id, username, password, verified, is_admin FROM users WHERE username = ?");
+    $stmt = $conn->prepare("SELECT user_id, username, password, verified, reject, is_admin FROM users WHERE username = ?");
     $stmt->bindParam(1, $username);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password'])) {
-        if ($user['verified'] == 0) {
+        if ($user['reject'] == 1) {
+            header("Location: reject.php");
+            exit;
+        } elseif ($user['verified'] == 0) {
             header("Location: index.php?error=Your%20account%20is%20not%20verified%20yet.%20Please%20contact%20the%20admin.");
             exit;
         } else {

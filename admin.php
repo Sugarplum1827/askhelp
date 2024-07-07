@@ -8,14 +8,18 @@ if (!isset($_SESSION['user_id']) || $_SESSION['username'] != 'admin') {
 include("app/db.conn.php");
 
 // Fetch unverified users
-$stmt = $conn->prepare("SELECT user_id, username, name, valid_id FROM users WHERE verified = 0");
+$stmt = $conn->prepare("SELECT user_id, username, name, valid_id, p_p FROM users WHERE verified = 0 AND reject = 0");
 $stmt->execute();
 $unverified_users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Verify user
+// Verify or reject user
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
     $user_id = intval($_POST['user_id']);
-    $stmt = $conn->prepare("UPDATE users SET verified = 1 WHERE user_id = ?");
+    if (isset($_POST['verify'])) {
+        $stmt = $conn->prepare("UPDATE users SET verified = 1 WHERE user_id = ?");
+    } elseif (isset($_POST['reject'])) {
+        $stmt = $conn->prepare("UPDATE users SET reject = 1 WHERE user_id = ?");
+    }
     $stmt->bindParam(1, $user_id);
     $stmt->execute();
     header("Location: admin.php");
@@ -53,13 +57,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
             <ul class="list-group">
                 <?php foreach ($unverified_users as $user): ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                       Phone number: <?= htmlspecialchars($user['username']) ?> (Name: <?= htmlspecialchars($user['name']) ?>, ID: 
-                       <a href="#" onclick="showImage('uploads/valid_ids/<?= htmlspecialchars($user['valid_id']) ?>')">
-                           <?= htmlspecialchars($user['valid_id']) ?>
-                       </a>)
+                        Phone number: <?= htmlspecialchars($user['username']) ?> (Name: <?= htmlspecialchars($user['name']) ?>, ID: 
+                        <a href="#" onclick="showImage('uploads/valid_ids/<?= htmlspecialchars($user['valid_id']) ?>')">
+                            <?= htmlspecialchars($user['valid_id']) ?>
+                        </a>,
+                        <a href="#" onclick="showImage('uploads/<?= htmlspecialchars($user['p_p']) ?>')">
+                            <?= htmlspecialchars($user['p_p']) ?>
+                        </a>)
                         <form action="admin.php" method="post" class="d-inline">
                             <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>">
-                            <button type="submit" class="btn btn-success">Verify</button>
+                            <button type="submit" name="verify" class="btn btn-success">Verify</button>
+                            <button type="submit" name="reject" class="btn btn-danger">Reject</button>
                         </form>
                     </li>
                 <?php endforeach; ?>

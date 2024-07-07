@@ -87,7 +87,7 @@
 
 		  <div class="mb-3">
 		    <label class="form-label">
-		           Profile Picture</label>
+		           Picture</label>
 		    <input type="file" 
 		           class="form-control"
 		           name="pp">
