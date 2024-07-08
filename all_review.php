@@ -70,7 +70,7 @@ foreach ($reviews as $review) {
 </head>
 <body>
     <div class="reviews-list">
-        <a href="log.php" class="fs-4 link-dark">&#8592; Back to Home</a>
+        <a href="home.php" class="fs-4 link-dark">&#8592; Back to Home</a>
         <h2>All Reviews</h2>
         <div class="reviews">
             <a href="reviews.php" title="Add Review">

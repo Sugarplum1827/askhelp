@@ -128,12 +128,15 @@ ALTER TABLE reviews
 ADD CONSTRAINT fk_reviewed_user
 FOREIGN KEY (reviewed_user_id) REFERENCES users(user_id);
 
+ALTER TABLE users ADD COLUMN valid_id VARCHAR(255) NOT NULL;
 
 ALTER TABLE users ADD column verified TINYINT(1) DEFAULT 0;
 
 ALTER TABLE users ADD column reject TINYINT(1) DEFAULT 0;
 
 ALTER TABLE users ADD COLUMN is_admin TINYINT(1) DEFAULT 0;
+
+ALTER TABLE users ADD COLUMN is_agency TINYINT(1) DEFAULT 0;
 
 CREATE TABLE call_logs (
     id INT AUTO_INCREMENT PRIMARY KEY,

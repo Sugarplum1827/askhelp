@@ -4,7 +4,7 @@
 </head>
 <body>
     <div class="w-400 shadow p-4 rounded mx-auto mt-5">
-        <a href="log.php" class="fs-4 link-dark">&#8592;</a>
+        <a href="home.php" class="fs-4 link-dark">&#8592;</a>
 
 </body>
 </html>
