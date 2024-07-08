@@ -188,4 +188,4 @@
   	header("Location: index.php");
    	exit;
   }
- ?> the send of chat is in this template
+ ?>

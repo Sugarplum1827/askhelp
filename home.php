@@ -10,6 +10,7 @@ if (isset($_SESSION['username'])) {
 
     $user = getUser($_SESSION['username'], $conn);
     $conversations = getConversation($user['user_id'], $conn);
+    $adminUser = getAdminUser($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -190,6 +191,12 @@ if (isset($_SESSION['username'])) {
         .chatbot-icon:hover {
             background: #0056b3;
         }
+        .admin-chat-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1001;
+        }
     </style>
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100">
@@ -245,15 +252,19 @@ if (isset($_SESSION['username'])) {
         </div>
     </div>
 
+    <div class="admin-chat-btn">
+        <a href="chat.php?user=<?=$adminUser['username']?>" class="btn btn-primary">Admin</a>
+    </div>
+
     <button class="chatbot-icon">
-    <i class="fa fa-envelope fa-lg text-dark"></i>
+        <i class="fa fa-envelope fa-lg text-dark"></i>
     </button>
     <div class="wrapper">
         <div class="title">Chatbot</div>
         <div class="form">
             <div class="bot-inbox inbox">
                 <div class="icon">
-                <i class="fa fa-user"></i>
+                    <i class="fa fa-user"></i>
                 </div>
                 <div class="msg-header">
                     <p>Hello there, how can I help you?</p>

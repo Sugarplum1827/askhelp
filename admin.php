@@ -38,6 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
             width: 100%;
             height: auto;
         }
+        .admin-chat-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+        }
     </style>
     <script>
         function showImage(src) {
@@ -89,6 +96,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="admin-chat-btn">
+        <a href="chat.php" class="btn btn-primary">Chat with Users</a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
